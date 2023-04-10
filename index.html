@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+    <title>Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="para1"> Weather Dashboard</h1>
-    <p id="inputContainer">City: <input type="text" id="cityInput"></p>
-
-    <script src="main.js"></script>
+    <h1>Weather Dashboard</h1>
+    <div id="search-container">
+        <label for="serrch-input">Enter a city:</label>
+        <input type="text" id="search-input">
+        <button id="search-button">Search</button>
+    </div>
+    <div id="weather-container">
+        <div id="loction"></div>
+        <div id="temperature"></div>
+        <div id="description"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
