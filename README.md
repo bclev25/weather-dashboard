@@ -19,7 +19,7 @@ SO THAT I can plan a trip accordingly
 ```
 
 ## Acceptance Criteria
-
+5 day 
 ```
 GIVEN a weather dashboard with form inputs
 WHEN I search for a city
