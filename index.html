@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <title>5 day Weather Forecast</title>
 </head>
+<link rel="stylesheet" href="style.css">
 <body>
-    <h1>Weather Dashboard</h1>
-    <div id="search-container">
-        <label for="serrch-input">Enter a city:</label>
-        <input type="text" id="search-input">
-        <button id="search-button">Search</button>
-    </div>
-    <div id="weather-container">
-        <div id="loction"></div>
-        <div id="temperature"></div>
-        <div id="description"></div>
-    </div>
-    <script src="script.js"></script>
+    <header>
+        <h1>5 Day Weather Forecast</h1>
+        <form>
+            <input type="text" id="city-input" placeholder="Enter a city name">
+            <button type="submit" id="search-button">Search</button>
+        </form>
+        <div id="search-history"></div>
+    </header>
+    <main>
+        <div id="current-weather"></div>
+        <div id="forecast"></div>
+</main>
+<script src="script.js"></script>
 </body>
 </html>
