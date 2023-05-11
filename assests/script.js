@@ -21,7 +21,7 @@ formEl.addEventListener('submit', function (event) {
 });
 
 function searchWeather(city) {
-    const currentWeatherUrl = '${API_BASE_URL}weather?q=${city}&units=metric&appid=${35db18a712a51bc6c7768193d3503876}';
+    const currentWeatherUrl =  `${API_BASE_URl}weather?q=${city}&units=metric&appid=${35db18a712a51bc6c7768193d3503876} `;
     fetch(currentWeatherUrl)
     .then((response) => {
         if (response.ok) {
@@ -33,7 +33,7 @@ function searchWeather(city) {
     .then((data) => {
         displayCurrentWeather(data);
         addSearchHistory(city);
-        const forecastUrl = "${API_BASE_URL}forecast?lat=${data.coord.lat}&lon=${data.coord.lon}&units=metric&appid=${35db18a712a51bc6c7768193d3503876}";
+        const forecastUrl =  `${API_BASE_URL}forecastEl?lat=${data.coord.lat}&lon=${data.coord.lon}&units=metric&appid=${35db18a712a51bc6c7768193d3503876} `;
         return fetch(forecastUrl);
     })
     .then((response) => {
