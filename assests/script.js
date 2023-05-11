@@ -1,8 +1,8 @@
-const formEl = document.querySelector("#search-form");
-const searchInputEl = document.querySelector("#search-input");
 const searchHistoryEl = document.querySelector("#search-history");
 const currentWeatherEl = document.querySelector("#search-weather");
 const forecastEl = document.querySelector("#forecast");
+const searchButton = document.getElementById("#search-button");
+const searchQuery = document.getElementById("search-input");
 
 const API_KEY = "35db18a712a51bc6c7768193d3503876";
 const API_BASE_URl = "https://api.openweathermap.org/data/2.5";
@@ -21,7 +21,7 @@ formEl.addEventListener('submit', function (event) {
 });
 
 function searchWeather(city) {
-    const currentWeatherUrl =  `${API_BASE_URl}weather?q=${city}&units=metric&appid=${35db18a712a51bc6c7768193d3503876} `;
+    const currentWeatherUrl =  `${API_BASE_URl}weather?q=${city}&units=metric&appid=${API_KEY}`;
     fetch(currentWeatherUrl)
     .then((response) => {
         if (response.ok) {
@@ -33,7 +33,7 @@ function searchWeather(city) {
     .then((data) => {
         displayCurrentWeather(data);
         addSearchHistory(city);
-        const forecastUrl =  `${API_BASE_URL}forecastEl?lat=${data.coord.lat}&lon=${data.coord.lon}&units=metric&appid=${35db18a712a51bc6c7768193d3503876} `;
+        const forecastUrl =  `${API_BASE_URl}forecastEl?lat=${data.coord.lat}&lon=${data.coord.lon}&units=metric&appid=${API_KEY}`;
         return fetch(forecastUrl);
     })
     .then((response) => {
@@ -87,3 +87,12 @@ function displayForecast(data) {
     forecastEl
 }
 
+searchButton.addEventListener("click", function() {
+    performSearch();
+});
+
+function performSearch() {
+    const searchQuery = document.getElementById("search-input").value;
+
+    console.log("Performing search for:", searchQuery);
+}
