@@ -1,98 +1,70 @@
-const searchHistoryEl = document.querySelector("#search-history");
-const currentWeatherEl = document.querySelector("#search-weather");
-const forecastEl = document.querySelector("#forecast");
-const searchButton = document.getElementById("#search-button");
-const searchQuery = document.getElementById("search-input");
+const apiKey = "46bdaf7c649f67e2ce603555190f7fd9";
+const apiUrl = "";
 
-const API_KEY = "35db18a712a51bc6c7768193d3503876";
-const API_BASE_URl = "https://api.openweathermap.org/data/2.5";
-const API_ICON_URL = "https://openweathermap.org/img/wn/";
+const cityInput = document.getElementById("cityInput");
+const searchBtn = document.getElementById("searchBtn");
+const weatherInfoContainer = document.querySelector(".weather-info");
+const forecastContainer = document.querySelector(".forecast");
+const searchHistoryContainer = document.querySelector(".search-history");
 
-let searchHistory = [];
+let searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
 
-formEl.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const searchValue = searchInputEl.ariaValueMax.trim();
-    if (searchValue === '') {
+async function getWeatherData(cityName) {
+    try{
+        const response = await fetch ("${apiUrl}?q=${cityName}&appid=${apiKey}");
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching weather data", error);
+        return null;
+    }
+}
+
+function displayForecast(weatherData) {
+
+}
+
+function handleSearch() {
+    const cityName = cityInput.ariaValueMax.trim();
+
+    if (cityName === '') {
+        alert("Please enter a city name!");
         return;
     }
-    searchWeather(searchValue);
-    searchInputEl.value = "";
-});
 
-function searchWeather(city) {
-    const currentWeatherUrl =  `${API_BASE_URl}weather?q=${city}&units=metric&appid=${API_KEY}`;
-    fetch(currentWeatherUrl)
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
+    getWeatherData(cityName)
+    .then((weatherData) => {
+        if (weatherData) {
+            displayCurrentWeather(weatherData);
+            displayForecast(weatherData);
+
+            searchHistory.push(cityName);
+            localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+            updateSearchHistory();
         } else {
-            throw new Error("City not found");
+            alert("City not found. Please try a different city");
         }
-    })
-    .then((data) => {
-        displayCurrentWeather(data);
-        addSearchHistory(city);
-        const forecastUrl =  `${API_BASE_URl}forecastEl?lat=${data.coord.lat}&lon=${data.coord.lon}&units=metric&appid=${API_KEY}`;
-        return fetch(forecastUrl);
-    })
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("Error fetching forecast data.");
-        }
-    })
-    .then((data) => {
-        displayForecast(data);
-    }) 
-    .catch((error) => {
-        console.error(error);
     });
 }
 
-function displayCurrentWeather(data) {
-    currentWeatherEl.innerHTML = "";
-    const cityNameEl = document.createElement("h2");
-    cityNameEl.textContent = data.name;
-    currentWeatherEl.appendChild(cityNameEl);
+function updateSearchHistory() {
+    searchHistoryContainer.innerHTML = '';
+    const list = document.createElement("ul");
 
-    const dateEl = document.createElement("h3");
-    const currentDate = new Date();
-    dateEl.textContent = currentDate.toLocaleDateString();
-    currentWeatherEl.appendChild(dateEl);
+    searchHistory.forEach((city) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = city;
+        listItem.addEventListener("click", () => {
+            cityInput.value = city;
+            handleSearch();
+        });
 
-    const weatherIconEl = document.createElement('img');
-    weatherIconEl.src = "${API_ICON_URL}${data.weather[0].icon}@2x.png";
-    weatherIconEl.alt = data.weather[0].description;
-    currentWeatherEl.appendChild(weatherIconEl);
+        list.appendChild(listItem);
+    });
 
-    const tempEl = document.createElement("p");
-    tempEl.textContent = "Temperature: ${data.main.temp} °F";
-    currentWeatherEl.appendChild(tempEl);
-
-    const humidityEl = document.createElement("p");
-    humidityEl.textContent = "Humidity: ${data.main.humidity}%";
-    currentWeatherEl.appendChild(humidityEl);
-
-    const windEl = document.createElement("p");
-    humidityEl.textContent = "Wind Speed: ${data.wind.speed} m/s";
-    currentWeatherEl.appendChild(windEl);
+    searchHistoryContainer.appendChild(list);
 }
 
-function displayForecast(data) {
-    forecastEl.innerHTML = "";
-    const titleEl = document.createElement('h2');
-    titleEl.textContent = "5-Day Forecast";
-    forecastEl
-}
+searchBtn.addEventListener("click", handleSearch);
 
-searchButton.addEventListener("click", function() {
-    performSearch();
-});
-
-function performSearch() {
-    const searchQuery = document.getElementById("search-input").value;
-
-    console.log("Performing search for:", searchQuery);
-}
+updateSearchHistory();
